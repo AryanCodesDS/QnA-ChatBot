@@ -39,16 +39,21 @@ def generate_text(prompt, question, model, api_key, temperature, max_tokens):
     res = chain.invoke({"question": question})
     return res
 
+
 def process_pdf(pdf):
     temp_pdf = f'./temp.pdf'
     with open(temp_pdf, 'wb') as f:
         f.write(pdf.getvalue())
     pdf_loader = PyPDFLoader(temp_pdf)
-    docs = pdf_loader.load_and_split(text_splitter=RecursiveCharacterTextSplitter(chunk_size=2000))
+    docs = pdf_loader.load_and_split(
+        text_splitter=RecursiveCharacterTextSplitter(chunk_size=2000))
     return docs
 
+
+embed = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 # Title of Application
 st.title("Question Answering Using LLMs")
+
 
 # Sidebar
 st.sidebar.title("Customise your model")
@@ -72,20 +77,9 @@ if chat_with_pdf_option:
             for r in results:
                 documents.extend(r)
         st.write("PDF Uploaded Successfully")
-
-        import pickle
-        VECTOR_DB_PATH = "vector_store.pkl"
-
-        if os.path.exists(VECTOR_DB_PATH):
-            with open(VECTOR_DB_PATH, "rb") as f:
-                vector_store = pickle.load(f)
-        else:
-            embed = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-            vector_store = FAISS.from_documents(documents, embedding=embed)
-            with open(VECTOR_DB_PATH, "wb") as f:
-                pickle.dump(vector_store, f)
-
+        vector_store = FAISS.from_documents(documents, embedding=embed)
         retriever = vector_store.as_retriever()
+
 
 def RAG_conv(prompt, question, model, api_key, temperature, max_tokens):
     if pdf_file:
@@ -121,6 +115,7 @@ def RAG_conv(prompt, question, model, api_key, temperature, max_tokens):
             "configurable": {"session_id": session_id}
         })
 
+        print(res)
         return res["answer"]
     else:
         return "Please upload a PDF file"
