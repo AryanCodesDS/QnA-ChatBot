@@ -1,11 +1,14 @@
 langchain
 python-dotenv
+langchain_huggingface
 langchain_community
 streamlit
 langchain_groq
 langchain_nvidia_ai_endpoints
 ipykernel
+pypdf
 langserve
 uvicorn
 sse_starlette
 fastapi
+faiss-cpu
