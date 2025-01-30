@@ -139,7 +139,6 @@ def RAG_conv(prompt, question, model, api_key, temperature, max_tokens):
             "configurable": {"session_id": session_id}
         })
 
-        print(res)
         return res["answer"]
     else:
         return "Please upload a PDF file"
