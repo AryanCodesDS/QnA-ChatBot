@@ -12,3 +12,10 @@ uvicorn
 sse_starlette
 fastapi
 faiss-cpu
+arxiv
+wikipedia
+langchain_google_community
+duckduckgo-search
+mysql
+mysql-connector-python
+psycopg2

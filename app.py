@@ -1,30 +1,33 @@
+# Miscallenous imports
+import os
 import streamlit as st
 from dotenv import load_dotenv
-import os
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_community.vectorstores import FAISS
-
-from langchain.chains import create_retrieval_chain
-from langchain.chains.history_aware_retriever import create_history_aware_retriever
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader
-
-from langchain_core.runnables import RunnableWithMessageHistory
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_community.chat_message_histories import ChatMessageHistory
+from typing import List
 import concurrent.futures
-# Load langchain libs
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-# from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_groq import ChatGroq
 from sentence_transformers import SentenceTransformer
 
+# Langchain Core
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables import RunnableWithMessageHistory
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_core.output_parsers import StrOutputParser
+
+# Langchain Community
+from langchain_community.vectorstores import FAISS
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.chat_message_histories import ChatMessageHistory
+
+# Langchain base
+from langchain.chains import create_retrieval_chain
+from langchain.chains.history_aware_retriever import create_history_aware_retriever
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.embeddings.base import Embeddings
-from typing import List
 
 load_dotenv()
+
+
 class SentenceTransformerEmbeddings(Embeddings):
     def __init__(self, model_name: str):
         self.model = SentenceTransformer(model_name)
@@ -34,6 +37,7 @@ class SentenceTransformerEmbeddings(Embeddings):
 
     def embed_query(self, text: str) -> List[float]:
         return self.model.encode([text])[0].tolist()
+
 
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
 embed = SentenceTransformerEmbeddings(model_name)
@@ -81,6 +85,7 @@ def load_and_process_pdfs(pdf_files):
         for r in results:
             documents.extend(r)
     return documents
+
 
 # Sidebar
 st.sidebar.title("Customise your model")
