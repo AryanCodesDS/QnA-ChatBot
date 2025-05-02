@@ -23,7 +23,7 @@ selected_opt = st.sidebar.radio(
 )
 
 #API Key
-api_key = st.sidebar.text_input(label="Enter Groq API Key") or "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"
+api_key = st.sidebar.text_input(label="Enter Groq API Key")
 
 list_models = [
                "llama-3.3-70b-versatile",
