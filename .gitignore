@@ -1,3 +1,4 @@
 env_1
 .env
 test.db
+__pycache__
